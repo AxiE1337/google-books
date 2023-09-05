@@ -9,20 +9,26 @@ function AppBook({ book }: IBookComponent) {
         <img
           src={book.volumeInfo.imageLinks.thumbnail}
           alt={book.volumeInfo.title}
+          className="drop-shadow-xl"
         />
       ) : (
         <img src="https://placeholder.pics/svg/150x200" alt="placeholder" />
       )}
-      <Link className="hover:opacity-80" to={`/book/${book.id}`}>
-        {book.volumeInfo.title}
-      </Link>
-      {book.volumeInfo.categories &&
-        book.volumeInfo.categories.map((c, index) => (
-          <h1 className="font-bold" key={index}>
-            {c}
-          </h1>
-        ))}
-      <h1>{book.volumeInfo.authors}</h1>
+      <div className="flex flex-col items-start gap-2 my-4 w-4/5">
+        {book.volumeInfo.categories &&
+          book.volumeInfo.categories.map((c, index) => (
+            <h1 className="underline opacity-80" key={index}>
+              {c}
+            </h1>
+          ))}
+        <Link
+          className="hover:opacity-80 text-left break-words font-bold"
+          to={`/book/${book.id}`}
+        >
+          {book.volumeInfo.title}
+        </Link>
+        <h1 className="text-left">{book.volumeInfo.authors}</h1>
+      </div>
     </div>
   )
 }

@@ -1,6 +1,11 @@
 import { FormEvent, memo, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../store/store'
-import { setCategory, setSearch, setSort } from '../store/slices/queryParams'
+import {
+  setCategory,
+  setPage,
+  setSearch,
+  setSort,
+} from '../store/slices/queryParams'
 import type { Categoty, Sort } from '../types'
 
 function Header() {
@@ -12,13 +17,18 @@ function Header() {
 
   const submitHandler = (e: FormEvent) => {
     e.preventDefault()
-    dispatch(setSearch(inputValue))
+    if (inputValue) {
+      dispatch(setPage(0))
+      dispatch(setSearch(inputValue))
+    }
   }
 
   const handleSort = (value: Sort) => {
+    dispatch(setPage(0))
     dispatch(setSort(value))
   }
   const handleCategory = (value: Categoty) => {
+    dispatch(setPage(0))
     dispatch(setCategory(value))
   }
 

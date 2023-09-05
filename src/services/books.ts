@@ -11,7 +11,7 @@ export const booksApi = createApi({
   endpoints: (builder) => ({
     getBooks: builder.query<IBooksRes, IQueryParams>({
       query: ({ page, search, sort, category }) =>
-        `/volumes?q=${search}${
+        `/volumes?q=intitle:${search}${
           category && `+subject:${category}`
         }&orderBy=${sort}&startIndex=${page}&maxResults=10`,
     }),

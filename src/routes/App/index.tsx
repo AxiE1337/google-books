@@ -1,15 +1,15 @@
-import { useState } from 'react'
 import { useGetBooksQuery } from '../../services/books'
-import { useAppSelector } from '../../store/store'
+import { useAppDispatch, useAppSelector } from '../../store/store'
+import { setPage } from '../../store/slices/queryParams'
 import Error from '../../components/Error'
 import Book from './components/AppBook'
 import Loading from '../../components/Loading'
 
 function App() {
-  const [page, setPage] = useState<number>(0)
-  const { search, category, sort } = useAppSelector(
+  const { search, category, sort, page } = useAppSelector(
     (state) => state.queryParams
   )
+  const dispatch = useAppDispatch()
   const { data, isFetching, isError } = useGetBooksQuery({
     page: page,
     search: search,
@@ -18,13 +18,16 @@ function App() {
   })
 
   const handlePage = (value: 'next' | 'prev') => {
+    if (!data) return
     switch (value) {
       case 'next':
-        setPage((prev) => prev + 10)
+        if (page < data.totalItems - 10) {
+          dispatch(setPage(page + 10))
+        }
         break
       case 'prev':
         if (page >= 10) {
-          setPage((prev) => prev - 10)
+          dispatch(setPage(page - 10))
         }
         break
     }
@@ -40,9 +43,7 @@ function App() {
   return (
     <main className="flex flex-col min-h-screen items-center justify-center">
       <h1 className="text-center text-xl font-bold p-2">
-        {data?.totalItems === 1
-          ? `${data?.totalItems + ' book was found'}`
-          : `${data?.totalItems + ' books were found'}`}
+        {`Found ${data?.totalItems} results`}
       </h1>
       <div className="grid grid-cols-4 md:grid-cols-1 gap-1">
         {data?.items &&
@@ -50,13 +51,24 @@ function App() {
             <Book book={book} key={book.id + index} />
           ))}
       </div>
-      <button className="btn" onClick={() => handlePage('prev')}>
-        prev
-      </button>
-      <h1>page:{page}</h1>
-      <button className="btn" onClick={() => handlePage('next')}>
-        next
-      </button>
+      <div className="flex gap-2 items-center justify-center">
+        {
+          <button
+            disabled={page < 10}
+            className="btn"
+            onClick={() => handlePage('prev')}
+          >
+            prev
+          </button>
+        }
+        <button
+          disabled={page > data!.totalItems - 10}
+          className="btn"
+          onClick={() => handlePage('next')}
+        >
+          next
+        </button>
+      </div>
     </main>
   )
 }
