@@ -11,9 +11,22 @@ export const booksApi = createApi({
   endpoints: (builder) => ({
     getBooks: builder.query<IBooksRes, IQueryParams>({
       query: ({ page, search, sort, category }) =>
-        `/volumes?q=intitle:${search}${
+        `/volumes?q=${search}${
           category && `+subject:${category}`
-        }&orderBy=${sort}&startIndex=${page}&maxResults=10`,
+        }&orderBy=${sort}&startIndex=${page}&maxResults=30`,
+      serializeQueryArgs: ({ endpointName }) => {
+        return endpointName
+      },
+      merge(currentCache, response, otherArgs) {
+        if (otherArgs.arg.page > 0 && response.items.length > 0) {
+          currentCache.items.push(...response.items)
+        } else {
+          return response
+        }
+      },
+      forceRefetch({ currentArg, previousArg }) {
+        return currentArg !== previousArg
+      },
     }),
     getBook: builder.query<IBook, string>({
       query: (bookId) => `/volumes/${bookId}`,

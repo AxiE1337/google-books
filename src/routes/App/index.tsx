@@ -10,30 +10,14 @@ function App() {
     (state) => state.queryParams
   )
   const dispatch = useAppDispatch()
-  const { data, isFetching, isError } = useGetBooksQuery({
+  const { data, isFetching, isError, isLoading } = useGetBooksQuery({
     page: page,
     search: search,
     sort: sort,
     category: category,
   })
 
-  const handlePage = (value: 'next' | 'prev') => {
-    if (!data) return
-    switch (value) {
-      case 'next':
-        if (page < data.totalItems - 10) {
-          dispatch(setPage(page + 10))
-        }
-        break
-      case 'prev':
-        if (page >= 10) {
-          dispatch(setPage(page - 10))
-        }
-        break
-    }
-  }
-
-  if (isFetching) {
+  if (isLoading) {
     return <Loading />
   }
   if (isError) {
@@ -42,8 +26,9 @@ function App() {
 
   return (
     <main className="flex flex-col min-h-screen items-center justify-center">
-      <h1 className="text-center text-xl font-bold p-2">
+      <h1 className="flex items-center justify-center gap-2 text-center text-xl font-bold p-2">
         {`Found ${data?.totalItems} results`}
+        {isFetching && <span className="loading loading-spinner"></span>}
       </h1>
       <div className="grid grid-cols-4 md:grid-cols-1 gap-1">
         {data?.items &&
@@ -51,24 +36,14 @@ function App() {
             <Book book={book} key={book.id + index} />
           ))}
       </div>
-      <div className="flex gap-2 items-center justify-center">
-        {
-          <button
-            disabled={page < 10}
-            className="btn"
-            onClick={() => handlePage('prev')}
-          >
-            prev
-          </button>
-        }
-        <button
-          disabled={page > data!.totalItems - 10}
-          className="btn"
-          onClick={() => handlePage('next')}
-        >
-          next
-        </button>
-      </div>
+      <button
+        disabled={page > data!.totalItems - 30 || isFetching}
+        className="btn"
+        onClick={() => dispatch(setPage(page + 30))}
+      >
+        Load more
+        {isFetching && <span className="loading loading-spinner"></span>}
+      </button>
     </main>
   )
 }

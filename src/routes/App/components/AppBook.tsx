@@ -27,7 +27,9 @@ function AppBook({ book }: IBookComponent) {
         >
           {book.volumeInfo.title}
         </Link>
-        <h1 className="text-left">{book.volumeInfo.authors}</h1>
+        <h1 className="text-left">
+          {book.volumeInfo.authors && book.volumeInfo.authors[0]}
+        </h1>
       </div>
     </div>
   )
