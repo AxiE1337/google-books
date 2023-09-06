@@ -30,7 +30,10 @@ function App() {
         {`Found ${data?.totalItems} results`}
         {isFetching && <span className="loading loading-spinner"></span>}
       </h1>
-      <div className="grid grid-cols-4 md:grid-cols-1 gap-1">
+      <div
+        className="grid grid-cols-4 md:grid-cols-1 gap-1"
+        data-cy="booksComponents"
+      >
         {data?.items &&
           data?.items.map((book, index) => (
             <Book book={book} key={book.id + index} />
@@ -40,6 +43,7 @@ function App() {
         disabled={page > data!.totalItems - 30 || isFetching}
         className="btn"
         onClick={() => dispatch(setPage(page + 30))}
+        data-cy="loadMoreBtn"
       >
         Load more
         {isFetching && <span className="loading loading-spinner"></span>}

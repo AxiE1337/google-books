@@ -51,6 +51,7 @@ function Header() {
             onChange={(e) => setInputValue(e.target.value)}
             defaultValue={search}
             className="input input-bordered w-full"
+            data-cy="search-input"
           />
           <button className="btn btn-square">
             <svg
