@@ -34,16 +34,16 @@ function Header() {
   }
 
   return (
-    <nav className="relative flex flex-col items-center justify-center bg-slate-700 min-h-[350px] gap-2 py-2">
+    <nav className="relative flex flex-col items-center justify-center bg-slate-700 min-h-[350px] gap-2 py-2 overflow-hidden">
       <img
         src={booksImg}
         alt="books"
-        className="absolute top-0 left-0 h-full w-full opacity-50"
+        className="absolute top-0 left-0 min-h-full min-w-full opacity-50"
       />
       <h1 className="text-white text-4xl my-4 select-none z-10">
         Search for books
       </h1>
-      <form className="flex w-3/5 py-2" onSubmit={submitHandler}>
+      <form className="flex w-3/5 md:w-4/5 py-2" onSubmit={submitHandler}>
         <div className="input-group z-10">
           <input
             type="text"
