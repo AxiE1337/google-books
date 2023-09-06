@@ -7,6 +7,7 @@ import {
   setSort,
 } from '../store/slices/queryParams'
 import type { Categoty, Sort } from '../types'
+import booksImg from '../assets/booksImg.png'
 
 function Header() {
   const [inputValue, setInputValue] = useState<string>('')
@@ -33,16 +34,23 @@ function Header() {
   }
 
   return (
-    <nav className="flex flex-col items-center justify-center bg-slate-700 min-h-40 gap-2 py-2">
-      <h1 className="text-white text-2xl">Search for books</h1>
-      <form className="flex" onSubmit={submitHandler}>
-        <div className="input-group">
+    <nav className="relative flex flex-col items-center justify-center bg-slate-700 min-h-[350px] gap-2 py-2">
+      <img
+        src={booksImg}
+        alt="books"
+        className="absolute top-0 left-0 h-full w-full opacity-50"
+      />
+      <h1 className="text-white text-4xl my-4 select-none z-10">
+        Search for books
+      </h1>
+      <form className="flex w-3/5 py-2" onSubmit={submitHandler}>
+        <div className="input-group z-10">
           <input
             type="text"
             placeholder="Search…"
             onChange={(e) => setInputValue(e.target.value)}
             defaultValue={search}
-            className="input input-bordered"
+            className="input input-bordered w-full"
           />
           <button className="btn btn-square">
             <svg
@@ -62,9 +70,9 @@ function Header() {
           </button>
         </div>
       </form>
-      <div className="flex flex-wrap w-full items-center justify-center gap-4 mt-1">
+      <div className="flex flex-wrap w-full items-center justify-center gap-4 mt-1 z-10">
         <div className="flex items-center justify-center gap-2">
-          <label className="text-white" htmlFor="category">
+          <label className="text-white select-none" htmlFor="category">
             Category
           </label>
           <select
@@ -83,7 +91,7 @@ function Header() {
           </select>
         </div>
         <div className="flex items-center justify-center gap-2">
-          <label className="text-white" htmlFor="sort">
+          <label className="text-white select-none" htmlFor="sort">
             Sorting by
           </label>
           <select
